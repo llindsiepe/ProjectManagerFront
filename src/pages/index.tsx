@@ -1,3 +1,10 @@
+import { useState } from "react";
+import axios from "axios";
+
+import { useRouter } from "next/router";
+
+import Link from "next/link";
+
 import {
   Container,
   Banner,
@@ -8,6 +15,11 @@ import {
 } from "../styles/Home";
 
 export default function Home() {
+  const [username, setUsername] = useState();
+  const [password, setPassword] = useState();
+
+  const router = useRouter();
+
   return (
     <Container>
       <img src="/logotipo.svg" />
@@ -22,8 +34,20 @@ export default function Home() {
         </Banner>
         <Login>
           <h2>Acesse sua conta</h2>
-          <input type="text" placeholder="Usuário" />
-          <input type="text" placeholder="Senha" />
+          <input
+            type="text"
+            placeholder="Usuário"
+            onChange={(e) => {
+              setUsername(e.target.value);
+            }}
+          />
+          <input
+            type="text"
+            placeholder="Senha"
+            onChange={(e) => {
+              setPassword(e.target.value);
+            }}
+          />
 
           {/* <OptionsLogin>
             <Connected>
@@ -33,12 +57,28 @@ export default function Home() {
             <h5>Esqueci minha senha</h5>
           </OptionsLogin> */}
 
-          <button type="submit">
+          <button
+            type="submit"
+            onClick={() => {
+              axios
+                .post("http://localhost:8080/sessions", {
+                  username: username,
+                  password: password,
+                })
+                .then((response) => {
+                  localStorage.setItem("username", response.data.username);
+                  router.push({ pathname: "/projectsHome" });
+                });
+            }}
+          >
             <h3>Entrar</h3>
           </button>
 
           <h5>
-            Ainda não possui conta? <span>Cadastre-se agora</span>
+            Ainda não possui conta?{" "}
+            <span>
+              <Link href="/register">Cadastre-se agora</Link>
+            </span>
           </h5>
         </Login>
       </Content>

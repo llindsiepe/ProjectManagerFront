@@ -63,6 +63,12 @@ export const DescriptionModal = styled.div`
   justify-content: space-between;
   align-items: flex-end;
   margin-bottom: 1.6rem;
+
+  input {
+    background: none;
+    border: none;
+    font-size: 1.4rem;
+  }
 `;
 
 export const Information = styled.div`
@@ -70,9 +76,11 @@ export const Information = styled.div`
   justify-content: space-between;
   margin-bottom: 1rem;
 
-  h6 {
-    font-size: 0.8rem;
-    font-weight: 300;
+  input {
+    background: none;
+    border: none;
+
+    text-align: right;
   }
 `;
 
@@ -81,7 +89,7 @@ export const InformationTitle = styled.div`
   gap: 0.6rem;
 
   h5 {
-    opacity: 0.5;
+    opacity: 1;
     font-weight: 300;
   }
 

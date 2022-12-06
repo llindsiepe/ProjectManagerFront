@@ -3,43 +3,84 @@ import ReactModal from "react-modal";
 import ModalShowMore from "../ModalShowMore";
 import { Container, Content, Description, Time, Price, User } from "./styles";
 
-export default function ProjectDescription() {
+import axios from "axios";
+
+export default function ProjectDescription({ project }) {
   const [modalIsOpen, setIsOpen] = useState(false);
 
-  function openModal() {
+  function openModal(id) {
     setIsOpen(true);
+    axios
+      .get("http://localhost:8080/project", {
+        headers: {
+          id: id,
+        },
+      })
+      .then((response) => {
+        setId(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   function closeModal() {
     setIsOpen(false);
   }
 
+  const [id, setId] = useState(0);
+
   return (
     <Container>
       <Content>
         <Description>
-          <input type="checkbox" />
-          <h4>Projeto #001</h4>
+          <input
+            type="checkbox"
+            onChange={() => {
+              axios
+                .patch(
+                  `http://localhost:8080/projects/${id.id}/done`,
+                  {},
+                  {
+                    headers: {
+                      username: localStorage.getItem("username"),
+                    },
+                  }
+                )
+                .then((response) => {});
+            }}
+          />
+          <h4>{project.title}</h4>
         </Description>
 
         <Time>
           <img src="/timer.svg" />
-          <h4>16/04/2022 - 16/05/2022</h4>
+          <h4>{project.deadline}</h4>
         </Time>
 
         <Price>
           <img src="/moneygroup.svg" />
-          <h4>R$9.400,00</h4>
+          <h4>{project.cost}</h4>
         </Price>
 
         <User>
           <img src="/user.svg" />
-          <h4>llindsiepe</h4>
+          <h4>{project.username}</h4>
         </User>
 
-        <button onClick={openModal}>Ver mais</button>
+        <button
+          onClick={() => {
+            openModal(project.id);
+          }}
+        >
+          Ver mais
+        </button>
 
-        <ModalShowMore isOpen={modalIsOpen} onRequestClose={closeModal} />
+        <ModalShowMore
+          isOpen={modalIsOpen}
+          onRequestClose={closeModal}
+          id={id}
+        />
       </Content>
       <hr />
     </Container>

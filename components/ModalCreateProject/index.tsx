@@ -1,4 +1,5 @@
 import ReactModal from "react-modal";
+import axios from "axios";
 
 import {
   Title,
@@ -8,6 +9,7 @@ import {
   EditButton,
   InputDiv,
 } from "./styles";
+import { useState } from "react";
 
 const customStyles = {
   content: {
@@ -32,6 +34,11 @@ export default function ModalCreateProject({
   isOpen,
   onRequestClose,
 }: ModalCreate) {
+  const [title, setTitle] = useState();
+  const [CEP, setCEP] = useState();
+  const [price, setPrice] = useState();
+  const [deadline, setDeadline] = useState();
+
   return (
     <ReactModal
       isOpen={isOpen}
@@ -49,15 +56,65 @@ export default function ModalCreateProject({
       </HeaderModal>
       <BodyModal>
         <InputDiv>
-          <input type="text" placeholder="Título do projeto" />
-          <input type="text" placeholder="CEP" />
+          <input
+            type="text"
+            placeholder="Título do projeto"
+            onChange={(e) => {
+              setTitle(e.target.value);
+            }}
+          />
+          <input
+            type="text"
+            placeholder="CEP"
+            onChange={(e) => {
+              setCEP(e.target.value);
+            }}
+          />
         </InputDiv>
         <InputDiv>
-          <input type="text" placeholder="Valor do projeto" />
-          <input type="text" placeholder="Prazo de entrega" />
+          <input
+            type="text"
+            placeholder="Valor do projeto"
+            onChange={(e) => {
+              setPrice(e.target.value);
+            }}
+          />
+          <input
+            type="text"
+            placeholder="Prazo de entrega"
+            onChange={(e) => {
+              setDeadline(e.target.value);
+            }}
+          />
         </InputDiv>
       </BodyModal>
-      <EditButton>Criar novo projeto</EditButton>
+      <EditButton
+        onClick={() => {
+          axios
+            .post(
+              "http://localhost:8080/project",
+              {
+                title: title,
+                zip_code: CEP,
+                cost: price,
+                deadline: deadline,
+              },
+              {
+                headers: {
+                  username: localStorage.getItem("username"),
+                },
+              }
+            )
+            .then((response) => {
+              onRequestClose();
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        }}
+      >
+        Criar novo projeto
+      </EditButton>
     </ReactModal>
   );
 }

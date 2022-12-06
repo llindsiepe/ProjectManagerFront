@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import ModalCreateProject from "../ModalCreateProject";
-import ModalProfile from "../ModalProfile";
+// import ModalProfile from "../ModalProfile";
 
 import { Container, Options, CreateProject, Profile } from "./styles";
 
@@ -31,10 +31,10 @@ export default function Header() {
       <img src="/logotipo.svg" />
 
       <Options>
-        <Profile onClick={openModalProfile}>
+        {/* <Profile onClick={openModalProfile}>
           <img src="/profile.svg" />
           <h4>Acessar perfil</h4>
-        </Profile>
+        </Profile> */}
 
         <CreateProject onClick={openModalCreate}>
           <h4>Criar novo projeto</h4>
@@ -45,10 +45,10 @@ export default function Header() {
           onRequestClose={closeModalCreate}
         />
 
-        <ModalProfile
+        {/* <ModalProfile
           isOpen={modalProfileIsOpen}
           onRequestClose={closeModalProfile}
-        />
+        /> */}
       </Options>
     </Container>
   );
